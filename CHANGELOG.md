@@ -4,9 +4,27 @@ All notable changes to `phil/analytics-bundle` will be documented in this file.
 
 Updates should follow the [Keep a CHANGELOG](https://keepachangelog.com/) principles.
 
+## 0.2.1-alpha - 2026-11-24
+
+Every `Sec-GPC` header of a request is read. See
+[Privacy signals](doc/privacy-signals.md).
+
+### Changed
+
+- The Node tests resolve `@hotwired/stimulus` to their stub with a synchronous hook given to `module.registerHooks()`,
+  on the loading thread, instead of `module.register()`, which Node deprecates (DEP0205).
+- The development requirements ask for the latest minor of each dependency (`doctrine/orm` 3.8, `doctrine/dbal` 4.6,
+  `doctrine/doctrine-bundle` 3.4).
+
+### Fixed
+
+- A browser that sent the Global Privacy Control in a second `Sec-GPC` header, or in a list such as `Sec-GPC: 0, 1`,
+  was counted: `CollectController` joins every occurrence of the header with commas, and `PrivacySignals::fromHeaders()`
+  reads one trimmed value `1` among them as the signal. `DNT` is still read as a single value.
+
 ## 0.2.0-alpha - 2026-11-18
 
-The next version is 0.2.0-alpha: a metric is read only in its canonical form, and the keys of the counter tables
+A metric is read only in its canonical form, and the keys of the counter tables
 compare byte by byte on MySQL and MariaDB. See [Upgrading from 0.1](doc/counters.md#upgrading-from-01).
 
 ### Added
